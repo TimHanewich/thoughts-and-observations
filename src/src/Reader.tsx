@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import './Reader.css'
 import bookData from './assets/book.json'
 
@@ -12,11 +12,20 @@ const pages: BookPage[] = (bookData as BookPage[]).sort((a, b) => a.Page - b.Pag
 
 export default function Reader({ onClose }: { onClose: () => void }) {
   const [index, setIndex] = useState(0)
+  const [visible, setVisible] = useState(true)
   const contentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     contentRef.current?.scrollTo(0, 0)
   }, [index])
+
+  const goToPage = useCallback((newIndex: number) => {
+    setVisible(false)
+    setTimeout(() => {
+      setIndex(newIndex)
+      setVisible(true)
+    }, 200)
+  }, [])
 
   const currentPage = pages[index]
   const showPageNumber = currentPage.Page >= 1
@@ -30,21 +39,21 @@ export default function Reader({ onClose }: { onClose: () => void }) {
       <div className="reader-body">
         <button
           className="reader-nav reader-nav-left"
-          onClick={() => setIndex((i) => Math.max(0, i - 1))}
-          disabled={index === 0}
+          onClick={() => goToPage(Math.max(0, index - 1))}
+          disabled={index === 0 || !visible}
           aria-label="Previous page"
         >
           &#8249;
         </button>
 
         <div className="reader-content">
-          <div className="reader-text" ref={contentRef} dangerouslySetInnerHTML={{ __html: formatContent(currentPage.Content) }} />
+          <div className={`reader-text ${visible ? 'reader-text-visible' : 'reader-text-hidden'}`} ref={contentRef} dangerouslySetInnerHTML={{ __html: formatContent(currentPage.Content) }} />
         </div>
 
         <button
           className="reader-nav reader-nav-right"
-          onClick={() => setIndex((i) => Math.min(pages.length - 1, i + 1))}
-          disabled={index === pages.length - 1}
+          onClick={() => goToPage(Math.min(pages.length - 1, index + 1))}
+          disabled={index === pages.length - 1 || !visible}
           aria-label="Next page"
         >
           &#8250;

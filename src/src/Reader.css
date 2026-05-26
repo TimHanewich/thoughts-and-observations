@@ -97,6 +97,15 @@
   font-size: 19px;
   line-height: 1.9;
   color: #2c2420;
+  transition: opacity 0.2s ease;
+}
+
+.reader-text-visible {
+  opacity: 1;
+}
+
+.reader-text-hidden {
+  opacity: 0;
 }
 
 .reader-text h1 {
