@@ -52,7 +52,7 @@ export default function Reader({ onClose }: { onClose: () => void }) {
       </div>
 
       {showPageNumber && (
-        <p className="reader-page-number">{currentPage.Page}</p>
+        <p className="reader-page-number">{currentPage.Page} / {pages[pages.length - 1].Page}</p>
       )}
     </div>
   )
