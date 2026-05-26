@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import './Reader.css'
 import bookData from './assets/book.json'
 
@@ -12,6 +12,11 @@ const pages: BookPage[] = (bookData as BookPage[]).sort((a, b) => a.Page - b.Pag
 
 export default function Reader({ onClose }: { onClose: () => void }) {
   const [index, setIndex] = useState(0)
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    contentRef.current?.scrollTo(0, 0)
+  }, [index])
 
   const currentPage = pages[index]
   const showPageNumber = currentPage.Page >= 1
@@ -33,7 +38,7 @@ export default function Reader({ onClose }: { onClose: () => void }) {
         </button>
 
         <div className="reader-content">
-          <div className="reader-text" dangerouslySetInnerHTML={{ __html: formatContent(currentPage.Content) }} />
+          <div className="reader-text" ref={contentRef} dangerouslySetInnerHTML={{ __html: formatContent(currentPage.Content) }} />
         </div>
 
         <button
