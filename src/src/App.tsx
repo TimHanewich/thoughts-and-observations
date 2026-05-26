@@ -17,7 +17,7 @@ function App() {
         className="portrait"
       />
       <h1 className="title">Thoughts and Observations</h1>
-      <p className="byline">by Charlie E. Aussenhofer</p>
+      <p className="byline">by Charles E. Aussenhofer</p>
       <div className="divider" />
       <button className="open-btn" onClick={() => setIsReading(true)}>
         Open
